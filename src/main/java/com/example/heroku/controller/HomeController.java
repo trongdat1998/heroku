@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Controller
+@RestController
 public class HomeController {
     @Autowired
     AccountDao ac;
     @RequestMapping("/")
-    public String home(Model model){
-        List<Account> a = ac.findAll();
-        model.addAttribute("mesage",a.get(0).getUsername());
-        return "home";
+    public List<Account> home(Model model){
+//        List<Account> a = ac.findAll();
+//        model.addAttribute("mesage",a.get(0).getUsername());
+        return ac.findAll();
     }
 }
