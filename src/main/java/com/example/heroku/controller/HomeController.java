@@ -14,7 +14,7 @@ import java.util.List;
 public class HomeController {
     @Autowired
     AccountDao ac;
-    @RequestMapping("/")
+    @RequestMapping("/home")
     public String home(Model model){
         List<Account> a = ac.findAll();
         model.addAttribute("mesage",a.get(0).getUsername());
