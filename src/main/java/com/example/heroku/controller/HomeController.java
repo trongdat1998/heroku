@@ -23,8 +23,8 @@ public class HomeController {
 
         @RequestMapping("/")
     public String home(Model model){
-//        List<Account> a = ac.findAll();
-        model.addAttribute("mesage","chào bạn");
+        List<Account> a = ac.findAll();
+        model.addAttribute("mesage",a.get(0).getEmail());
         return "home";
     }
 }
