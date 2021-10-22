@@ -38,7 +38,7 @@ public class ThanhtoanRestController {
         String vnp_TxnRef = Config.getRandomNumber(8);//Mã OOP
         String vnp_IpAddr = Config.getIpAddress;
         String vnp_TmnCode = Config.vnp_TmnCode;//Mã website
-
+        paymenDto.setAmount(2000);//////1
         int amount = paymenDto.getAmount() * 100;
 
         Map vnp_Params = new HashMap();
@@ -47,6 +47,7 @@ public class ThanhtoanRestController {
         vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
         vnp_Params.put("vnp_Amount", String.valueOf(amount));
         vnp_Params.put("vnp_CurrCode", "VND");
+        paymenDto.setBankcode("NCB");//////2
         String bank_code = paymenDto.getBankcode();
         if (bank_code != null && !bank_code.isEmpty()) {
             vnp_Params.put("vnp_BankCode", bank_code);
@@ -54,7 +55,7 @@ public class ThanhtoanRestController {
         vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
         vnp_Params.put("vnp_OrderInfo", vnp_OrderInfo);
         vnp_Params.put("vnp_OrderType", orderType);
-
+        paymenDto.setLanguage("vn");///////3
         String locate = paymenDto.getLanguage();
         if (locate != null && !locate.isEmpty()) {
             vnp_Params.put("vnp_Locale", locate);
