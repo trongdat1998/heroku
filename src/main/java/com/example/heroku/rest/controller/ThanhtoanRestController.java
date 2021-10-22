@@ -1,16 +1,13 @@
 package com.example.heroku.rest.controller;
 import com.example.heroku.dto.PaymenDto;
+import com.example.heroku.dto.Res;
 import com.example.heroku.model.Config;
 import com.google.gson.JsonObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -29,8 +26,8 @@ import java.util.TimeZone;
 
 @RestController
 public class ThanhtoanRestController {
-    @GetMapping("/thanhtoan")
-    public void thanhtoan(@RequestBody PaymenDto  paymenDto, HttpServletResponse resp)throws IOException {
+    @PostMapping("/thanhtoan")
+    public ResponseEntity<?> thanhtoan(@RequestBody PaymenDto  paymenDto, HttpServletResponse resp)throws IOException {
         String vnp_Version = "2.1.0";   //Phiên bản api
         String vnp_Command = "pay";
         String vnp_OrderInfo = paymenDto.getVnp_OrderInfo(); //Thông tin mô tả nội dung thanh toán
@@ -101,12 +98,6 @@ public class ThanhtoanRestController {
         String vnp_SecureHash = Config.hmacSHA512(Config.vnp_HashSecret, hashData.toString());
         queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
         String paymentUrl = Config.vnp_PayUrl + "?" + queryUrl;
-        com.google.gson.JsonObject job = new JsonObject();
-        job.addProperty("code", "00");
-        job.addProperty("message", "success");
-        job.addProperty("data", paymentUrl);
-        Gson gson = new Gson();
-        resp.getWriter().write(gson.toJson(job));
-//    return ResponseEntity.status(HttpStatus.OK).body(job);
+    return ResponseEntity.ok(new Res(paymentUrl,"success",200));
     }
 }
