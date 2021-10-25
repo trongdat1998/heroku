@@ -5,6 +5,7 @@ import com.example.heroku.entity.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,14 +16,8 @@ public class HomeController {
     @Autowired
     AccountDao ac;
     @RequestMapping("/")
-    public String home(){
-        return "redirect:/vnpay.html";
+    public String home() {
+        return "redirect:vnpay.html";
     }
 
-////        @RequestMapping("/")
-////    public String home(Model model){
-////        List<Account> a = ac.findAll();
-////        model.addAttribute("mesage",a.get(0).getEmail());
-////        return "home";
-//    }
 }

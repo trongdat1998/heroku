@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PaymenDto {
-    int amount;
-    String vnp_OrderInfo;
-    String bankcode;
-    String language;
+    int amount = 400000;
+    String vnp_OrderInfo ="mua hang";
+    String bankcode = "NCB";
+    String language="vn";
 }
