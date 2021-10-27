@@ -11,10 +11,12 @@ import java.util.Map;
 import java.util.Random;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.http.HttpServletRequest;
+
 public class Config {
-    public static String getIpAddress="13.160.92.202";
+//    public static String getIpAddress="13.160.92.202";
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-    public static String vnp_Returnurl = "https://vietffod.herokuapp.com/VnPayIPN";
+    public static String vnp_Returnurl = "http://localhost:5000/VnPayIPN";
     public static String vnp_TmnCode = "NX9UGL9F";
     public static String vnp_HashSecret = "GLFQNNQIXLEAKTJFAQOLMSNIIHBRNISG";
     public static String vnp_apiUrl = "https://sandbox.vnpayment.vn/merchant_webapi/merchant.html";
@@ -115,18 +117,18 @@ public class Config {
         }
     }
 
-//    public static String getIpAddress(HttpServletRequest request) {
-//        String ipAdress;
-//        try {
-//            ipAdress = request.getHeader("X-FORWARDED-FOR");
-//            if (ipAdress == null) {
-//                ipAdress = request.getRemoteAddr();
-//            }
-//        } catch (Exception e) {
-//            ipAdress = "Invalid IP:" + e.getMessage();
-//        }
-//        return ipAdress;
-//    }
+    public static String getIpAddress(HttpServletRequest request) {
+        String ipAdress;
+        try {
+            ipAdress = request.getHeader("X-FORWARDED-FOR");
+            if (ipAdress == null) {
+                ipAdress = request.getRemoteAddr();
+            }
+        } catch (Exception e) {
+            ipAdress = "Invalid IP:" + e.getMessage();
+        }
+        return ipAdress;
+    }
 
     public static String getRandomNumber(int len) {
         Random rnd = new Random();
