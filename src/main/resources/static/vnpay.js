@@ -4,11 +4,10 @@ weatherApp.controller('WeatherCtrl', function ($scope, $http) {
     $scope.items = [];
     $scope.create = function () {
         var item = angular.copy($scope.form);
-        $http.post('/thanhtoan', item).then(resp => {
-            $scope.items=resp.data;
-            alert("Thêm mới thành công")
+        $http.post('/vnpay').then(resp => {
+            window.location.assign(""+resp.data.data)
+            // alert("=>"+resp.data.data)
         }).catch(error => {
-            alert("Lỗi thêm mới sản phẩm");
             console.log("Error", error);
         });
     }

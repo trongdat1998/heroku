@@ -17,7 +17,7 @@ public class Config {
     public static String vnp_Returnurl = "http://localhost:5000/VnPayIPN";
     public static String vnp_TmnCode = "NX9UGL9F";
     public static String vnp_HashSecret = "GLFQNNQIXLEAKTJFAQOLMSNIIHBRNISG";
-
+    public static String vnp_apiUrl = "https://sandbox.vnpayment.vn/merchant_webapi/merchant.html";
     public static String md5(String message) {
         String digest = null;
         try {

@@ -15,6 +15,10 @@ import java.util.List;
 public class HomeController {
     @Autowired
     AccountDao ac;
+//    @RequestMapping("/")
+//    public String home() {
+//        return "home.html";
+//    }
     @RequestMapping("/")
     public String home() {
         return "redirect:vnpay.html";

@@ -6,10 +6,7 @@ import com.example.heroku.model.Config;
 import com.google.gson.JsonObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,9 +23,8 @@ import java.util.*;
 @RestController
 public class ThanhtoanRestController {
     @PostMapping("/vnpay")
-    public ResponseEntity<?> thanhtoan( HttpServletResponse resp) throws IOException {
-     PaymenDto paymenDto = new PaymenDto();
-
+    public ResponseEntity<?> thanhtoan() throws IOException {
+        PaymenDto paymenDto = new PaymenDto();
         String vnp_Version = "2.1.0";   //Phiên bản api
         String vnp_Command = "pay";
         String vnp_OrderInfo = paymenDto.getVnp_OrderInfo(); //Thông tin mô tả nội dung thanh toán
@@ -51,7 +47,7 @@ public class ThanhtoanRestController {
         vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
         vnp_Params.put("vnp_OrderInfo", vnp_OrderInfo);
         vnp_Params.put("vnp_OrderType", orderType);
-        paymenDto.setLanguage("vn");///////3
+        paymenDto.setLanguage("vn");
         String locate = paymenDto.getLanguage();
         if (locate != null && !locate.isEmpty()) {
             vnp_Params.put("vnp_Locale", locate);
@@ -61,10 +57,8 @@ public class ThanhtoanRestController {
         vnp_Params.put("vnp_ReturnUrl", Config.vnp_Returnurl);
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
         Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
-
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
         String vnp_CreateDate = formatter.format(cld.getTime());
-
         vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
         cld.add(Calendar.MINUTE, 15);
         String vnp_ExpireDate = formatter.format(cld.getTime());
@@ -98,20 +92,37 @@ public class ThanhtoanRestController {
         queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
         String paymentUrl = Config.vnp_PayUrl + "?" + queryUrl;
         return ResponseEntity.ok(new Res(paymentUrl, "thanh toán thành công", 200));
+
     }
+
     @GetMapping("/VnPayIPN")
-    public void VnPayIPN(HttpServletRequest req) {
+    public void VnPayIPN(HttpServletRequest req,
+                         @RequestParam("vnp_Amount") String vnp_Amount,
+                         @RequestParam("vnp_BankCode") String vnp_BankCode,
+                         @RequestParam("vnp_BankTranNo") String vnp_BankTranNo,
+                         @RequestParam("vnp_CardType") String vnp_CardType,
+                         @RequestParam("vnp_OrderInfo") String vnp_OrderInfo,
+                         @RequestParam("vnp_PayDate") String vnp_PayDate,
+                         @RequestParam("vnp_ResponseCode") String vnp_ResponseCode,
+                         @RequestParam("vnp_TmnCode") String vnp_TmnCode,
+                         @RequestParam("vnp_TransactionNo") String vnp_TransactionNo,
+                         @RequestParam("vnp_TransactionStatus") String vnp_TransactionStatus,
+                         @RequestParam("vnp_TxnRef") String vnp_TxnRef,
+                         @RequestParam("vnp_SecureHash") String vnp_SecureHash
+
+
+    ) {
         try {
             Map fields = new HashMap();
             for (Enumeration params = req.getParameterNames(); params.hasMoreElements(); ) {
                 String fieldName = (String) params.nextElement();
                 String fieldValue = req.getParameter(fieldName);
                 if ((fieldValue != null) && (fieldValue.length() > 0)) {
+                    System.out.println("1 =>" + fieldName);
+                    System.out.println("2 =>" + fieldValue);
                     fields.put(fieldName, fieldValue);
                 }
             }
-
-            String vnp_SecureHash = req.getParameter("vnp_SecureHash");
             if (fields.containsKey("vnp_SecureHashType")) {
                 fields.remove("vnp_SecureHashType");
             }
@@ -120,8 +131,6 @@ public class ThanhtoanRestController {
             }
             // Check checksum
             String signValue = Config.hashAllFields(fields);
-            System.out.println("1 =>"+vnp_SecureHash);
-            System.out.println("2 =>"+signValue);
             if (signValue.equals(vnp_SecureHash)) {
                 boolean checkOrderId = true; // vnp_TxnRef exists in your database
                 boolean checkAmount = true; // vnp_Amount is valid (Check vnp_Amount VNPAY returns compared to the amount of the code (vnp_TxnRef) in the Your database).
