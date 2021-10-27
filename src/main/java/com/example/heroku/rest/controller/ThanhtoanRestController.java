@@ -23,7 +23,7 @@ import java.util.*;
 @RestController
 public class ThanhtoanRestController {
     @PostMapping("/vnpay")
-    public ResponseEntity<?> thanhtoan(HttpServletRequest req) throws IOException {
+    public void thanhtoan(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         PaymenDto paymenDto = new PaymenDto();
         String vnp_Version = "2.1.0";   //Phiên bản api
         String vnp_Command = "pay";
@@ -47,6 +47,7 @@ public class ThanhtoanRestController {
         vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
         vnp_Params.put("vnp_OrderInfo", vnp_OrderInfo);
         vnp_Params.put("vnp_OrderType", orderType);
+
         paymenDto.setLanguage("vn");
         String locate = paymenDto.getLanguage();
         if (locate != null && !locate.isEmpty()) {
@@ -97,7 +98,13 @@ public class ThanhtoanRestController {
         String vnp_SecureHash = Config.hmacSHA512(Config.vnp_HashSecret, hashData.toString());
         queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
         String paymentUrl = Config.vnp_PayUrl + "?" + queryUrl;
-        return ResponseEntity.ok(new Res(paymentUrl, "thanh toán thành công", 200));
+//        return ResponseEntity.ok(new Res(paymentUrl, "thanh toán thành công", 200));
+        com.google.gson.JsonObject job = new JsonObject();
+        job.addProperty("code", "00");
+        job.addProperty("message", "success");
+        job.addProperty("data", paymentUrl);
+        Gson gson = new Gson();
+        resp.getWriter().write(gson.toJson(job));
     }
 
     @GetMapping("/VnPayIPN")
