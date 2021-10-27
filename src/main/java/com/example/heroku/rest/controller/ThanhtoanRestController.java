@@ -65,7 +65,7 @@ public class ThanhtoanRestController {
         //Add Params of 2.1.0 Version
         vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
         /////////////////////////////////////////////////////////////
-        String vnp_Bill_Mobile ="0369332232";
+        String vnp_Bill_Mobile = "0369332232";
         vnp_Params.put("vnp_Bill_Mobile", vnp_Bill_Mobile);
         vnp_Params.put("vnp_Bill_Email", "dat@gmail.com");
         ///
@@ -115,56 +115,55 @@ public class ThanhtoanRestController {
                                       @RequestParam("vnp_TxnRef") String vnp_TxnRef,
                                       @RequestParam("vnp_SecureHash") String vnp_SecureHash
     ) {
-        try {
-            Map fields = new HashMap();
-            for (Enumeration params = req.getParameterNames(); params.hasMoreElements(); ) {
-                String fieldName = (String) params.nextElement();
-                String fieldValue = req.getParameter(fieldName);
-                if ((fieldValue != null) && (fieldValue.length() > 0)) {
-                    System.out.println("=>"+fieldName+ ": "+fieldValue);
-                    fields.put(fieldName, fieldValue);
-                }
-            }
-            if (fields.containsKey("vnp_SecureHashType")) {
-                fields.remove("vnp_SecureHashType");
-            }
-            if (fields.containsKey("vnp_SecureHash")) {
-                fields.remove("vnp_SecureHash");
-            }
-            System.out.println(" dat=>"+fields.get("vnp_Bill_Email"));
-            // Check checksum
-            String signValue = Config.hashAllFields(fields);
-            if (signValue.equals(vnp_SecureHash)) {
-                boolean checkOrderId = true; // vnp_TxnRef exists in your database
-                boolean checkAmount = true; // vnp_Amount is valid (Check vnp_Amount VNPAY returns compared to the amount of the code (vnp_TxnRef) in the Your database).
-                boolean checkOrderStatus = true; // PaymnentStatus = 0 (pending)
-                if (checkOrderId) {
-                    if (checkAmount) {
-                        if (checkOrderStatus) {
-                            if ("00".equals(req.getParameter("vnp_ResponseCode"))) {
-                                System.out.print("đat");
-                                ResponseEntity.ok(new Res(null, "thành công", 200));
-                            } else {
-                                System.out.print("đat");
-                                // Here Code update PaymnentStatus = 2 into your Database
-                            }
-                            System.out.print("{\"RspCode\":\"00\",\"Message\":\"Confirm Success\"}");
-                        } else {
 
-                            System.out.print("{\"RspCode\":\"02\",\"Message\":\"Order already confirmed\"}");
+        Map fields = new HashMap();
+        for (Enumeration params = req.getParameterNames(); params.hasMoreElements(); ) {
+            String fieldName = (String) params.nextElement();
+            String fieldValue = req.getParameter(fieldName);
+            if ((fieldValue != null) && (fieldValue.length() > 0)) {
+                System.out.println("=>" + fieldName + ": " + fieldValue);
+                fields.put(fieldName, fieldValue);
+            }
+        }
+        if (fields.containsKey("vnp_SecureHashType")) {
+            fields.remove("vnp_SecureHashType");
+        }
+        if (fields.containsKey("vnp_SecureHash")) {
+            fields.remove("vnp_SecureHash");
+        }
+        System.out.println(" dat=>" + fields.get("vnp_Bill_Email"));
+        // Check checksum
+        String signValue = Config.hashAllFields(fields);
+        if (signValue.equals(vnp_SecureHash)) {
+            boolean checkOrderId = true; // vnp_TxnRef exists in your database
+            boolean checkAmount = true; // vnp_Amount is valid (Check vnp_Amount VNPAY returns compared to the amount of the code (vnp_TxnRef) in the Your database).
+            boolean checkOrderStatus = true; // PaymnentStatus = 0 (pending)
+            if (checkOrderId) {
+                if (checkAmount) {
+                    if (checkOrderStatus) {
+                        if ("00".equals(req.getParameter("vnp_ResponseCode"))) {
+                            System.out.print("đat");
+                            ResponseEntity.ok(new Res(null, "thành công", 200));
+                        } else {
+                            System.out.print("đat");
+                            // Here Code update PaymnentStatus = 2 into your Database
                         }
+                        System.out.print("{\"RspCode\":\"00\",\"Message\":\"Confirm Success\"}");
                     } else {
-                        System.out.print("{\"RspCode\":\"04\",\"Message\":\"Invalid Amount\"}");
+
+                        System.out.print("{\"RspCode\":\"02\",\"Message\":\"Order already confirmed\"}");
                     }
                 } else {
-                    System.out.print("{\"RspCode\":\"01\",\"Message\":\"Order not Found\"}");
+                    System.out.print("{\"RspCode\":\"04\",\"Message\":\"Invalid Amount\"}");
                 }
             } else {
-                System.out.print("{\"RspCode\":\"97\",\"Message\":\"Invalid Checksum\"}");
+                System.out.print("{\"RspCode\":\"01\",\"Message\":\"Order not Found\"}");
             }
-        } catch (Exception e) {
-            System.out.print("{\"RspCode\":\"99\",\"Message\":\"Unknow error\"}");
+        } else {
+            System.out.print("{\"RspCode\":\"97\",\"Message\":\"Invalid Checksum\"}");
         }
-        return ResponseEntity.ok(new Res(null, " thành công", 200));
+        String a = (String) fields.get("vnp_Bill_Mobile");
+
+        return ResponseEntity.ok(new Res(a, " thành công", 200));
     }
 }
