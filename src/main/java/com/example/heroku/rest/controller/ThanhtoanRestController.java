@@ -140,7 +140,6 @@ public class ThanhtoanRestController {
                         if (checkOrderStatus) {
                             if ("00".equals(req.getParameter("vnp_ResponseCode"))) {
                                 System.out.print("đat");
-                                //Here Code update PaymnentStatus = 1 into your Database
                                 ResponseEntity.ok(new Res(null, "thành công", 200));
                             } else {
                                 System.out.print("đat");
