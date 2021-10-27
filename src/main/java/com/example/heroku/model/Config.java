@@ -69,31 +69,6 @@ public class Config {
         return digest;
     }
 
-    //Util for VNPAY
-    public static String hashAllFields(Map fields) {
-        // create a list and sort it
-        List fieldNames = new ArrayList(fields.keySet());
-        Collections.sort(fieldNames);
-        // create a buffer for the md5 input and add the secure secret first
-        StringBuilder sb = new StringBuilder();
-        //sb.append(com.vnpay.common.Config.vnp_HashSecret);
-        Iterator itr = fieldNames.iterator();
-        while (itr.hasNext()) {
-            String fieldName = (String) itr.next();
-            String fieldValue = (String) fields.get(fieldName);
-            if ((fieldValue != null) && (fieldValue.length() > 0)) {
-                sb.append(fieldName);
-                sb.append("=");
-                sb.append(fieldValue);
-            }
-            if (itr.hasNext()) {
-                sb.append("&");
-            }
-        }
-        //return Sha256(sb.toString());
-        return hmacSHA512(vnp_HashSecret,sb.toString());
-    }
-
     public static String hmacSHA512(final String key, final String data) {
         try {
 
@@ -115,6 +90,30 @@ public class Config {
         } catch (Exception ex) {
             return "";
         }
+    }
+
+    //Util for VNPAY
+    public static String hashAllFields(Map fields) {
+        // create a list and sort it
+        List fieldNames = new ArrayList(fields.keySet());
+        Collections.sort(fieldNames);
+        // create a buffer for the md5 input and add the secure secret first
+        StringBuilder sb = new StringBuilder();
+
+        Iterator itr = fieldNames.iterator();
+        while (itr.hasNext()) {
+            String fieldName = (String) itr.next();
+            String fieldValue = (String) fields.get(fieldName);
+            if ((fieldValue != null) && (fieldValue.length() > 0)) {
+                sb.append(fieldName);
+                sb.append("=");
+                sb.append(fieldValue);
+            }
+            if (itr.hasNext()) {
+                sb.append("&");
+            }
+        }
+        return hmacSHA512(com.example.heroku.model.Config.vnp_HashSecret, sb.toString());
     }
 
     public static String getIpAddress(HttpServletRequest request) {

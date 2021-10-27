@@ -115,7 +115,6 @@ public class ThanhtoanRestController {
                                       @RequestParam("vnp_TxnRef") String vnp_TxnRef,
                                       @RequestParam("vnp_SecureHash") String vnp_SecureHash
     ) {
-
         Map fields = new HashMap();
         for (Enumeration params = req.getParameterNames(); params.hasMoreElements(); ) {
             String fieldName = (String) params.nextElement();
@@ -142,7 +141,6 @@ public class ThanhtoanRestController {
                 if (checkAmount) {
                     if (checkOrderStatus) {
                         if ("00".equals(req.getParameter("vnp_ResponseCode"))) {
-                            System.out.print("đat");
                             ResponseEntity.ok(new Res(null, "thành công 1", 200));
                         } else {
                             System.out.print("đat");
@@ -163,7 +161,6 @@ public class ThanhtoanRestController {
             System.out.print("{\"RspCode\":\"97\",\"Message\":\"Invalid Checksum\"}");
         }
         String a = (String) fields.get("vnp_Bill_Mobile");
-
         return ResponseEntity.ok(new Res(a, " thành công", 200));
     }
 }
