@@ -23,7 +23,7 @@ import java.util.*;
 @RestController
 public class ThanhtoanRestController {
     @PostMapping("/vnpay")
-    public void thanhtoan(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    public ResponseEntity<?> thanhtoan(HttpServletRequest req) throws IOException {
         PaymenDto paymenDto = new PaymenDto();
         String vnp_Version = "2.1.0";   //Phiên bản api
         String vnp_Command = "pay";
@@ -47,7 +47,6 @@ public class ThanhtoanRestController {
         vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
         vnp_Params.put("vnp_OrderInfo", vnp_OrderInfo);
         vnp_Params.put("vnp_OrderType", orderType);
-
         paymenDto.setLanguage("vn");
         String locate = paymenDto.getLanguage();
         if (locate != null && !locate.isEmpty()) {
@@ -96,50 +95,46 @@ public class ThanhtoanRestController {
         }
         String queryUrl = query.toString();
         String vnp_SecureHash = Config.hmacSHA512(Config.vnp_HashSecret, hashData.toString());
-        queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
+        queryUrl += "&vnp_SecureHashType=HmacSHA512&vnp_SecureHash=" + vnp_SecureHash;
         String paymentUrl = Config.vnp_PayUrl + "?" + queryUrl;
-//        return ResponseEntity.ok(new Res(paymentUrl, "thanh toán thành công", 200));
-        com.google.gson.JsonObject job = new JsonObject();
-        job.addProperty("code", "00");
-        job.addProperty("message", "success");
-        job.addProperty("data", paymentUrl);
-        Gson gson = new Gson();
-        resp.getWriter().write(gson.toJson(job));
+        return ResponseEntity.ok(new Res(paymentUrl, "success", 200));
     }
 
     @GetMapping("/VnPayIPN")
-    public ResponseEntity<?> VnPayIPN(HttpServletRequest req,
-                                      @RequestParam("vnp_Amount") String vnp_Amount,
-                                      @RequestParam("vnp_BankCode") String vnp_BankCode,
-                                      @RequestParam("vnp_BankTranNo") String vnp_BankTranNo,
-                                      @RequestParam("vnp_CardType") String vnp_CardType,
-                                      @RequestParam("vnp_OrderInfo") String vnp_OrderInfo,
-                                      @RequestParam("vnp_PayDate") String vnp_PayDate,
-                                      @RequestParam("vnp_ResponseCode") String vnp_ResponseCode,
-                                      @RequestParam("vnp_TmnCode") String vnp_TmnCode,
-                                      @RequestParam("vnp_TransactionNo") String vnp_TransactionNo,
-                                      @RequestParam("vnp_TransactionStatus") String vnp_TransactionStatus,
-                                      @RequestParam("vnp_TxnRef") String vnp_TxnRef,
-                                      @RequestParam("vnp_SecureHash") String vnp_SecureHash
+    public ResponseEntity<?> VnPayIPN(HttpServletRequest req
+//                                      @RequestParam("vnp_Amount") String vnp_Amount,
+//                                      @RequestParam("vnp_BankCode") String vnp_BankCode,
+//                                      @RequestParam("vnp_BankTranNo") String vnp_BankTranNo,
+//                                      @RequestParam("vnp_CardType") String vnp_CardType,
+//                                      @RequestParam("vnp_OrderInfo") String vnp_OrderInfo,
+//                                      @RequestParam("vnp_PayDate") String vnp_PayDate,
+//                                      @RequestParam("vnp_ResponseCode") String vnp_ResponseCode,
+//                                      @RequestParam("vnp_TmnCode") String vnp_TmnCode,
+//                                      @RequestParam("vnp_TransactionNo") String vnp_TransactionNo,
+//                                      @RequestParam("vnp_TransactionStatus") String vnp_TransactionStatus,
+//                                      @RequestParam("vnp_TxnRef") String vnp_TxnRef
+
     ) {
         Map fields = new HashMap();
         for (Enumeration params = req.getParameterNames(); params.hasMoreElements(); ) {
             String fieldName = (String) params.nextElement();
             String fieldValue = req.getParameter(fieldName);
             if ((fieldValue != null) && (fieldValue.length() > 0)) {
-                System.out.println("=>" + fieldName + ": " + fieldValue);
+//                System.out.println("=>" + fieldName + ": " + fieldValue);
                 fields.put(fieldName, fieldValue);
             }
         }
+        String vnp_SecureHash = req.getParameter("vnp_SecureHash");
+        System.out.println("1=>" + vnp_SecureHash);
         if (fields.containsKey("vnp_SecureHashType")) {
             fields.remove("vnp_SecureHashType");
         }
         if (fields.containsKey("vnp_SecureHash")) {
             fields.remove("vnp_SecureHash");
         }
-        System.out.println(" dat=>" + fields.get("vnp_Bill_Email"));
         // Check checksum
         String signValue = Config.hashAllFields(fields);
+        System.out.println("2=>" + signValue);
         if (signValue.equals(vnp_SecureHash)) {
             boolean checkOrderId = true; // vnp_TxnRef exists in your database
             boolean checkAmount = true; // vnp_Amount is valid (Check vnp_Amount VNPAY returns compared to the amount of the code (vnp_TxnRef) in the Your database).
@@ -167,7 +162,8 @@ public class ThanhtoanRestController {
         } else {
             System.out.print("{\"RspCode\":\"97\",\"Message\":\"Invalid Checksum\"}");
         }
-        String a = (String) fields.get("vnp_Bill_Mobile");
-        return ResponseEntity.ok(new Res(a, " thành công", 200));
+        String a = (String) fields.get("vnp_SecureHash");
+        return ResponseEntity.ok(new Res(a, "Thất bại", 97));
     }
+
 }
