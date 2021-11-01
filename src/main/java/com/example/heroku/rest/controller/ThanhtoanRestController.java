@@ -90,20 +90,7 @@ public class ThanhtoanRestController {
     }
 
     @GetMapping("/VnPayIPN")
-    public ResponseEntity<?> VnPayIPN(HttpServletRequest req,
-                                      @RequestParam("vnp_Amount") String vnp_Amount,
-                                      @RequestParam("vnp_BankCode") String vnp_BankCode,
-                                      @RequestParam("vnp_BankTranNo") String vnp_BankTranNo,
-                                      @RequestParam("vnp_CardType") String vnp_CardType,
-                                      @RequestParam("vnp_OrderInfo") String vnp_OrderInfo,
-                                      @RequestParam("vnp_PayDate") String vnp_PayDate,
-                                      @RequestParam("vnp_ResponseCode") String vnp_ResponseCode,
-                                      @RequestParam("vnp_TmnCode") String vnp_TmnCode,
-                                      @RequestParam("vnp_TransactionNo") String vnp_TransactionNo,
-                                      @RequestParam("vnp_TransactionStatus") String vnp_TransactionStatus,
-                                      @RequestParam("vnp_TxnRef") String vnp_TxnRef
-
-    ) throws UnsupportedEncodingException {
+    public ResponseEntity<?> VnPayIPN(HttpServletRequest req) throws UnsupportedEncodingException {
         Map fields = new HashMap();
         for (Enumeration params = req.getParameterNames(); params.hasMoreElements(); ) {
             String fieldName = (String) params.nextElement();
@@ -152,7 +139,7 @@ public class ThanhtoanRestController {
     }
 
     @GetMapping("/VnPayReturn")
-    public void VnPayIPN(HttpServletRequest req) throws UnsupportedEncodingException {
+    public void VnPayReturn(HttpServletRequest req) throws UnsupportedEncodingException {
         Map fields = new HashMap();
         for (Enumeration params = req.getParameterNames(); params.hasMoreElements(); ) {
             String fieldName = (String) params.nextElement();
