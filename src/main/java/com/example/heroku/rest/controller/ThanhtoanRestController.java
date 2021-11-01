@@ -7,12 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -24,7 +20,7 @@ public class ThanhtoanRestController {
     @PostMapping("/vnpay")
     public ResponseEntity<?> thanhtoan() throws IOException {
         PaymenDto paymenDto = new PaymenDto();
-        String vnp_Version = "2.1.0";   //Phiên bản api
+        String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String vnp_OrderInfo = paymenDto.getVnp_OrderInfo(); //Thông tin mô tả nội dung thanh toán
         String orderType = "200000";//bảng Danh mục hàng hóa =>Thời trang
@@ -134,13 +130,12 @@ public class ThanhtoanRestController {
                     if (checkOrderStatus) {
                         if ("00".equals(req.getParameter("vnp_ResponseCode"))) {
                             System.out.print("đat1");
-                            ResponseEntity.ok(new Res(null, "thành công 1", 200));
+                          return  ResponseEntity.ok(new Res(null, "thành công 1", 200));
                         } else {
                             System.out.print("đat");
                         }
                         System.out.print("{\"RspCode\":\"00\",\"Message\":\"Confirm Success\"}");
                     } else {
-
                         System.out.print("{\"RspCode\":\"02\",\"Message\":\"Order already confirmed\"}");
                     }
                 } else {
@@ -153,7 +148,7 @@ public class ThanhtoanRestController {
             System.out.print("{\"RspCode\":\"97\",\"Message\":\"Invalid Checksum\"}");
         }
         String a = (String) fields.get("vnp_SecureHash");
-        return ResponseEntity.ok(new Res("redirect:/VnPayReturn", "Thất bại", 97));
+        return ResponseEntity.ok(new Res(null, "Thất bại", 97));
     }
 
     @GetMapping("/VnPayReturn")
