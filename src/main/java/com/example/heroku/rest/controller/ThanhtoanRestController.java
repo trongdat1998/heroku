@@ -138,7 +138,7 @@ public class ThanhtoanRestController {
     }
 
     @GetMapping("/VnPayReturn")
-    public void VnPayReturn(HttpServletRequest req) throws UnsupportedEncodingException {
+    public ResponseEntity<?> VnPayReturn(HttpServletRequest req) throws UnsupportedEncodingException {
         Map fields = new HashMap();
         for (Enumeration params = req.getParameterNames(); params.hasMoreElements(); ) {
             String fieldName = (String) params.nextElement();
@@ -162,9 +162,8 @@ public class ThanhtoanRestController {
                 System.out.print("GD Khong thanh cong");
             }
 
-        } else {
-            System.out.print("Chu ky khong hop le");
         }
+        return ResponseEntity.ok(new Res(null, "Chu ky khong hop le", 97));
     }
 
 }
