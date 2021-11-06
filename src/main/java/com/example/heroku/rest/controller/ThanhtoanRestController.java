@@ -88,7 +88,7 @@ public class ThanhtoanRestController {
         return ResponseEntity.ok(new Res(paymentUrl, "success", 200));
     }
 
-    @GetMapping("/VnPayIPN")
+    @GetMapping("https://demovnpay.herokuapp.com/VnPayIPN")
     public ResponseEntity<?> VnPayIPN(HttpServletRequest req) throws UnsupportedEncodingException {
         Map fields = new HashMap();
         for (Enumeration params = req.getParameterNames(); params.hasMoreElements(); ) {
@@ -116,7 +116,7 @@ public class ThanhtoanRestController {
                     if (checkOrderStatus) {
                         if ("00".equals(req.getParameter("vnp_ResponseCode"))) {
                             System.out.print("đat1");
-                          return  ResponseEntity.ok(new Res(null, "thành công 1", 200));
+                          return  ResponseEntity.ok(new Res(null, "thành công", 200));
                         } else {
                             System.out.print("đat");
                         }
@@ -158,6 +158,7 @@ public class ThanhtoanRestController {
         if (signValue.equals(vnp_SecureHash)) {
             if ("00".equals(req.getParameter("vnp_ResponseCode"))) {
                 System.out.print("GD Thanh cong");
+                return ResponseEntity.ok(new Res(null, "GD Thanh cong", 97));
             } else {
                 System.out.print("GD Khong thanh cong");
             }

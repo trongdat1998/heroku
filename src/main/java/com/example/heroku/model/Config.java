@@ -62,7 +62,7 @@ public class Config {
                 sb.append("&");
             }
         }
-        return hmacSHA512("GLFQNNQIXLEAKTJFAQOLMSNIIHBRNISG", sb.toString());
+        return hmacSHA512("EGVKQVZIJEECHNWATROYUXMKMZPCKXVM", sb.toString());
     }
     public static String getRandomNumber(int len) {
         Random rnd = new Random();
