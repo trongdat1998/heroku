@@ -15,10 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 public class Config {
    public static String getIpAddress="0:0:0:0:0:0:0:1";
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-    public static String vnp_Returnurl = "https://demovnpay.herokuapp.com/VnPayReturn";
-    public static String vnp_TmnCode ="7AFCY72I";
-    public static String vnp_HashSecret ="EGVKQVZIJEECHNWATROYUXMKMZPCKXVM";
-    public static String vnp_apiUrl = "http://localhost:5000/VnPayIPN";
+    public static String vnp_Returnurl = "https://vietffod.herokuapp.com/vnpay/return";
+    public static String vnp_TmnCode ="NX9UGL9F";
+    public static String vnp_HashSecret ="GLFQNNQIXLEAKTJFAQOLMSNIIHBRNISG";
     public static String hmacSHA512(final String key, final String data) {
         try {
 

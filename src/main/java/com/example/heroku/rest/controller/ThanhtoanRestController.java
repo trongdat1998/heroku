@@ -88,7 +88,7 @@ public class ThanhtoanRestController {
         return ResponseEntity.ok(new Res(paymentUrl, "success", 200));
     }
 
-    @GetMapping("https://demovnpay.herokuapp.com/VnPayIPN")
+    @GetMapping("vnpay/ipn")
     public ResponseEntity<?> VnPayIPN(HttpServletRequest req) throws UnsupportedEncodingException {
         Map fields = new HashMap();
         for (Enumeration params = req.getParameterNames(); params.hasMoreElements(); ) {
@@ -137,7 +137,7 @@ public class ThanhtoanRestController {
         return ResponseEntity.ok(new Res(null, "Thất bại", 97));
     }
 
-    @GetMapping("/VnPayReturn")
+    @GetMapping("/vnpay/return")
     public ResponseEntity<?> VnPayReturn(HttpServletRequest req) throws UnsupportedEncodingException {
         Map fields = new HashMap();
         for (Enumeration params = req.getParameterNames(); params.hasMoreElements(); ) {
