@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 public class Config {
    public static String getIpAddress="0:0:0:0:0:0:0:1";
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-    public static String vnp_Returnurl = "https://vietffod.herokuapp.com/vnpay/return";
+    public static String vnp_Returnurl = "http://localhost:5000/vnpay/VnPayReturn";
     public static String vnp_TmnCode ="NX9UGL9F";
     public static String vnp_HashSecret ="GLFQNNQIXLEAKTJFAQOLMSNIIHBRNISG";
     public static String hmacSHA512(final String key, final String data) {
@@ -61,7 +61,7 @@ public class Config {
                 sb.append("&");
             }
         }
-        return hmacSHA512("EGVKQVZIJEECHNWATROYUXMKMZPCKXVM", sb.toString());
+        return hmacSHA512("GLFQNNQIXLEAKTJFAQOLMSNIIHBRNISG", sb.toString());
     }
     public static String getRandomNumber(int len) {
         Random rnd = new Random();

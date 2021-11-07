@@ -88,7 +88,7 @@ public class ThanhtoanRestController {
         return ResponseEntity.ok(new Res(paymentUrl, "success", 200));
     }
 
-    @GetMapping("vnpay/ipn")
+    @GetMapping("/vnpay/VnPayIPN")
     public ResponseEntity<?> VnPayIPN(HttpServletRequest req) throws UnsupportedEncodingException {
         Map fields = new HashMap();
         for (Enumeration params = req.getParameterNames(); params.hasMoreElements(); ) {
@@ -137,7 +137,7 @@ public class ThanhtoanRestController {
         return ResponseEntity.ok(new Res(null, "Thất bại", 97));
     }
 
-    @GetMapping("/vnpay/return")
+    @GetMapping("/vnpay/VnPayReturn")
     public ResponseEntity<?> VnPayReturn(HttpServletRequest req) throws UnsupportedEncodingException {
         Map fields = new HashMap();
         for (Enumeration params = req.getParameterNames(); params.hasMoreElements(); ) {
@@ -162,7 +162,6 @@ public class ThanhtoanRestController {
             } else {
                 System.out.print("GD Khong thanh cong");
             }
-
         }
         return ResponseEntity.ok(new Res(null, "Chu ky khong hop le", 97));
     }

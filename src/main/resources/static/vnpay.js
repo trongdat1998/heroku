@@ -6,7 +6,6 @@ weatherApp.controller('WeatherCtrl', function ($scope, $http) {
         var item = angular.copy($scope.form);
         $http.post('/vnpay').then(resp => {
             window.location.assign(""+resp.data.data)
-            // alert("=>"+resp.data.data)
         }).catch(error => {
             console.log("Error", error);
         });
